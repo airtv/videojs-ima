@@ -50,7 +50,8 @@
     timeout: 5000,
     prerollTimeout: 100,
     adLabel: 'Advertisement',
-    showControlsForJSAds: true
+    showControlsForJSAds: true,
+    useImaFullscreen: true
   };
 
   var init = function(options, readyCallback) {
@@ -703,7 +704,7 @@
       if (this.player.isFullscreen()) {
         addClass_(this.fullscreenDiv, 'ima-fullscreen');
         removeClass_(this.fullscreenDiv, 'ima-non-fullscreen');
-        if (this.adsManager) {
+        if (this.adsManager && this.settings.useImaFullscreen) {
           this.adsManager.resize(
               window.screen.width,
               window.screen.height,
