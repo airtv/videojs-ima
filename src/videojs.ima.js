@@ -713,7 +713,7 @@
       } else {
         addClass_(this.fullscreenDiv, 'ima-non-fullscreen');
         removeClass_(this.fullscreenDiv, 'ima-fullscreen');
-        if (this.adsManager) {
+        if (this.adsManager && this.settings.useImaFullscreen) {
           this.adsManager.resize(
               this.getPlayerWidth(),
               this.getPlayerHeight(),
