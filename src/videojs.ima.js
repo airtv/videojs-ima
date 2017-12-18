@@ -129,7 +129,7 @@
               document.createElement('div'));
       assignControlAttributes_(this.adContainerDiv, 'ima-ad-container');
       if (!this.settings.useImaFullscreen) {
-        assignControlAttributes_(this.adContainerDiv, 'black-background');
+        addClass_(this.adContainerDiv, 'black-background');
       }
       this.adContainerDiv.style.position = "absolute";
       this.adContainerDiv.style.zIndex = 1111;
