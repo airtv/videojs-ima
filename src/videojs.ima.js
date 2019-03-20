@@ -292,6 +292,8 @@
               initHeight,
               google.ima.ViewMode.NORMAL);
           this.adsManager.setVolume(this.player.muted() ? 0 : this.player.volume());
+          // Update volume interface
+          onVolumeChange_();
         } catch (adError) {
           onAdError_(adError);
         }
@@ -466,6 +468,10 @@
      * @private
      */
    var onAdLoaded_ = function(adEvent) {
+      // LKQD is overriding the volume. Use this to reestablish the ad volume
+      // as what we expect it to be in the IMA.
+      this.adsManager.setVolume(this.adsManager.getVolume());
+
       if (!adEvent.getAd().isLinear()) {
         this.player.play();
       }
@@ -1361,7 +1367,10 @@
       this.autoPlayAdBreaks = false;
     }
 
-    player.one('play', setUpPlayerIntervals_);
+    // We play ads before generating play events, so we need to
+    // set up the intervals on load.
+    // player.one('play', setUpPlayerIntervals_);
+    setUpPlayerIntervals_();
 
     player.on('ended', this.localContentEndedListener);
     player.on('dispose', this.playerDisposedListener);
