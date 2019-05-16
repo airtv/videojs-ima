@@ -1,5 +1,5 @@
 {
-  "name": "videojs-ima",
+  "name": "@airtv/videojs-ima",
   "version": "0.5.0",
   "license": "Apache-2.0",
   "main": "./src/videojs.ima.js",
@@ -13,8 +13,8 @@
     "test": "python -m SimpleHTTPServer"
   },
   "dependencies": {
-    "video.js": "~5.3",
-    "videojs-contrib-ads": "~3.1.2"
+    "video.js": "^5.19",
+    "videojs-contrib-ads": "~4.2.3"
   },
   "repository": {
     "type": "git",

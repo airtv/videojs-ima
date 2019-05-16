@@ -213,6 +213,37 @@
     }.bind(this);
 
     /**
+     * @return {boolean} true if we expect that ads will play muted.
+     * false otherwise. (Adapted from vjsima 1.5.2) ATV
+     */
+    this.adsWillPlayMuted = function() {
+      if (this.settings.adsWillPlayMuted !== undefined) {
+        return this.settings.adsWillPlayMuted;
+      } else if (this.settings.adWillPlayMuted !== undefined) {
+        return this.settings.adWillPlayMuted;
+      } else if (this.player.muted() !== undefined) {
+        return this.player.muted();
+      } else {
+        return this.player.volume() == 0;
+      }
+    };
+
+    /**
+     * @return {boolean} true if we expect that ads will autoplay.
+     * false otherwise. (Adapted from vjsima 1.5.2) ATV
+     */
+    this.adsWillAutoplay = function() {
+      if (this.settings.adsWillAutoplay !== undefined) {
+        return this.settings.adsWillAutoplay;
+      } else if (this.settings.adWillAutoplay !== undefined) {
+        return this.settings.adWillAutoplay;
+      } else {
+        return false;
+        // return !!this.playerWrapper.getPlayerOptions().autoplay;
+      }
+    };
+
+    /**
      * Creates the AdsRequest and request ads through the AdsLoader.
      */
     this.requestAds = function() {
@@ -235,6 +266,10 @@
           this.settings.nonLinearWidth || this.getPlayerWidth();
       adsRequest.nonLinearAdSlotHeight =
           this.settings.nonLinearHeight || (this.getPlayerHeight() / 3);
+
+      // ATV: Added for auroplaying ads on mobile
+      adsRequest.setAdWillAutoPlay(this.adsWillAutoplay());
+      adsRequest.setAdWillPlayMuted(this.adsWillPlayMuted());
 
       this.adsLoader.requestAds(adsRequest);
     }.bind(this);
