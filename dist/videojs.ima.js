@@ -146,7 +146,10 @@ var PlayerWrapper = function PlayerWrapper(player, adsPluginSettings, controller
   this.vjsPlayer.on('dispose', this.playerDisposedListener.bind(this));
   this.vjsPlayer.on('readyforpreroll', this.onReadyForPreroll.bind(this));
   this.vjsPlayer.on('adtimeout', this.onAdTimeout.bind(this));
-  this.vjsPlayer.ready(this.onPlayerReady.bind(this));
+
+  if (!this.controller.getSettings().sync) {
+    this.vjsPlayer.ready(this.onPlayerReady.bind(this));
+  }
 
   if (this.controller.getSettings().requestMode === 'onPlay') {
     this.vjsPlayer.one('play', this.controller.requestAds.bind(this.controller));
@@ -604,6 +607,14 @@ PlayerWrapper.prototype.reset = function () {
   // mid-roll time.
   this.contentPlayheadTracker.currentTime = 0;
   this.contentComplete = false;
+};
+
+/**
+ * Add a ready callback to the VJS player with the 'sync' option, ensuring
+ * synchronous execution if possible.
+ */
+PlayerWrapper.prototype.setSynchronousReadyCallback = function () {
+  this.vjsPlayer.ready(this.onPlayerReady.bind(this), true);
 };
 
 /**
@@ -1154,7 +1165,7 @@ AdUi.prototype.setShowCountdown = function (showCountdownIn) {
   this.countdownDiv.style.display = this.showCountdown ? 'block' : 'none';
 };
 
-var name = "videojs-ima";
+var name = "@airtv/videojs-ima";
 var version = "1.9.0";
 var license = "Apache-2.0";
 var main = "./dist/videojs.ima.js";
@@ -1972,6 +1983,9 @@ var Controller = function Controller(player, options) {
   this.playerWrapper = new PlayerWrapper(player, adsPluginSettings, this);
   this.adUi = new AdUi(this);
   this.sdkImpl = new SdkImpl(this);
+  if (this.settings.sync) {
+    this.playerWrapper.setSynchronousReadyCallback();
+  }
 };
 
 Controller.IMA_DEFAULTS = {
