@@ -138,7 +138,10 @@ const PlayerWrapper = function(player, adsPluginSettings, controller) {
   this.vjsPlayer.on('dispose', this.playerDisposedListener.bind(this));
   this.vjsPlayer.on('readyforpreroll', this.onReadyForPreroll.bind(this));
   this.vjsPlayer.on('adtimeout', this.onAdTimeout.bind(this));
-  this.vjsPlayer.ready(this.onPlayerReady.bind(this));
+
+  if (!this.controller.getSettings().sync) {
+    this.vjsPlayer.ready(this.onPlayerReady.bind(this));
+  }
 
   if (this.controller.getSettings().requestMode === 'onPlay') {
       this.vjsPlayer.one('play',
@@ -637,5 +640,14 @@ PlayerWrapper.prototype.reset = function() {
   this.contentPlayheadTracker.currentTime = 0;
   this.contentComplete = false;
 };
+
+
+/**
+ * Add a ready callback to the VJS player with the 'sync' option, ensuring
+ * synchronous execution if possible.
+ */
+PlayerWrapper.prototype.setSynchronousReadyCallback = function() {
+  this.vjsPlayer.ready(this.onPlayerReady.bind(this), true);
+}
 
 export default PlayerWrapper;
