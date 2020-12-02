@@ -76,6 +76,9 @@ const Controller = function(player, options) {
   this.playerWrapper = new PlayerWrapper(player, adsPluginSettings, this);
   this.adUi = new AdUi(this);
   this.sdkImpl = new SdkImpl(this);
+  if (this.settings.sync) {
+    this.playerWrapper.setSynchronousReadyCallback();
+  };
 };
 
 
